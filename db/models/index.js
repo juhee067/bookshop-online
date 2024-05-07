@@ -3,8 +3,9 @@
 const Sequelize = require('sequelize');
 const env = process.env.NODE_ENV || 'development';
 
-// config파일에 있는 설정값들을 불러온다.
-// config객체의 env변수 키 의 객체 값들을 불러온다.
+// config 파일에 있는 설정값들을 불러온다.
+// config 객체의 env변수 키 의 객체 값들을 불러온다.
+// 즉 데이터베이스 설정을 불러오는 것
 const config = require('../config/config.json')[env];
 const db = {};
 
