@@ -8,10 +8,6 @@ const app = express();
 
 app.set('port', process.env.PORT || 3000);
 
-// PUG 설정
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
 sequelize
   .sync({ force: false })
   .then(() => {
