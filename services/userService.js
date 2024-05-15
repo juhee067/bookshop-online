@@ -1,5 +1,5 @@
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const userService = {
   generateToken: (id, email, name) => {
     return jwt.sign({ id, email, name }, process.env.PRIVATE_KEY, {
@@ -7,8 +7,9 @@ const userService = {
       issuer: 'juhee',
     });
   },
-  hashPwd: (res, salt) => {
-    const { password } = req.body;
+  hashPwd: (password, salt) => {
     return crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
   },
 };
+
+module.exports = userService;

@@ -1,16 +1,27 @@
 const db = require('../models');
+const userService = require('../services/userService');
+const crypto = require('crypto');
 
 const User = db.users;
 const signup = async (req, res) => {
   const user = req.body;
+  const salt = crypto.randomBytes(10).toString('base64');
+  const hashPwd = userService.hashPwd(user.password, salt);
   let userData = {
     username: user.username,
     email: user.email,
-    password: user.password,
+    password: hashPwd,
     address: user.address,
     contact: user.contact,
+    salt: salt,
   };
-  await User.create(userData).catch((err) => res.status(400).json({ status: 400 }));
+  try {
+    await User.create(userData);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ status: 400 });
+  }
+
   res.status(200).json({ status: 200 });
 };
 
