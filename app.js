@@ -7,7 +7,8 @@ const { sequelize } = require('./models');
 const app = express();
 
 app.set('port', process.env.PORT || 3000);
-
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 sequelize
   .sync({ force: false })
   .then(() => {
@@ -40,7 +41,7 @@ app.use((err, req, res, next) => {
 });
 
 const router = require('./routers/UserRouter.js');
-app.use('/', router);
+app.use('/users', router);
 
 // 서버 실행
 app.listen(app.get('port'), () => {
