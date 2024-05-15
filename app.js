@@ -3,7 +3,7 @@ const path = require('path');
 const morgan = require('morgan');
 
 // index.js에 있는 db.sequelize 객체 모듈을 구조분해로 불러온다.
-const { sequelize } = require('./db/models');
+const { sequelize } = require('./models');
 const app = express();
 
 app.set('port', process.env.PORT || 3000);
