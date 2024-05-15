@@ -1,6 +1,6 @@
 const db = require('../models');
 
-const User = db.Users;
+const User = db.users;
 const addUser = async (req, res) => {
   let info = {
     username: req.body.username,

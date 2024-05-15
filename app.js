@@ -8,7 +8,8 @@ const app = express();
 
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, './views'));
+
 sequelize
   .sync({ force: false })
   .then(() => {
@@ -23,13 +24,6 @@ app.use(express.static(path.join(__dirname, 'public'))); // 요청시 기본 경
 app.use(express.json()); // json 파싱
 app.use(express.urlencoded({ extended: false })); // uri 파싱
 
-// 일부러 에러 발생시키기 TEST용
-app.use((req, res, next) => {
-  const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
-  error.status = 404;
-  next(error);
-});
-
 // 에러 처리 미들웨어
 app.use((err, req, res, next) => {
   // 템플릿 변수 설정
@@ -40,7 +34,7 @@ app.use((err, req, res, next) => {
   res.render('error'); // 템플릿 엔진을 렌더링 하여 응답
 });
 
-const router = require('./routers/UserRouter.js');
+const router = require('./routers/UserRouter');
 app.use('/users', router);
 
 // 서버 실행
