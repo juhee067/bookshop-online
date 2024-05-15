@@ -27,12 +27,17 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
   const { email, password } = req.body;
+
+  const user = await User.findOne({ where: { email } });
+  const hashPwd = userService.hashPwd(password, user.salt);
+
   try {
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
+    const userEmail = await User.findOne({ where: { email } });
+
+    if (!userEmail || user.password !== hashPwd) {
       return res.status(401).json({ status: 401 });
     }
-    res.status(200).json({ status: 200, user: user });
+    res.status(200).json({ status: 200, user: userEmail });
   } catch (err) {
     console.error('로그인 중 오류 발생:', err);
     res.status(500).json({ message: '서버 오류 발생' });
