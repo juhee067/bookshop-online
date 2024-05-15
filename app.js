@@ -39,6 +39,9 @@ app.use((err, req, res, next) => {
   res.render('error'); // 템플릿 엔진을 렌더링 하여 응답
 });
 
+const router = require('./routers/UserRouter.js');
+app.use('/', router);
+
 // 서버 실행
 app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기 중');
