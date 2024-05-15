@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       address: DataTypes.STRING(50),
       contact: DataTypes.STRING(50),
+      salt: {
+        type: DataTypes.STRING,
+      },
     },
     {
       timestamps: false,

@@ -34,8 +34,8 @@ app.use((err, req, res, next) => {
   res.render('error'); // 템플릿 엔진을 렌더링 하여 응답
 });
 
-const router = require('./routers/UserRouter');
-app.use('/users', router);
+const userRouter = require('./routers/UserRouter');
+app.use('/users', userRouter);
 
 // 서버 실행
 app.listen(app.get('port'), () => {

@@ -18,6 +18,9 @@ module.exports = {
       },
       address: Sequelize.STRING(50),
       contact: Sequelize.STRING(50),
+      salt: {
+        type: DataTypes.STRING,
+      },
     });
   },
 
