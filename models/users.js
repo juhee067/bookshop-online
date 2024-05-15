@@ -1,32 +1,27 @@
 'use strict';
 
-module.exports = {
-  async up(queryInterface, Sequelize) {
-    queryInterface.createTable(
-      'Users',
-      {
-        id: {
-          type: Sequelize.INTEGER(11),
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        username: { type: Sequelize.STRING(35), allowNull: false },
-        email: { type: Sequelize.STRING(50), allowNull: false },
-        password: {
-          type: Sequelize.STRING(20),
-          allowNull: false,
-        },
-        address: Sequelize.STRING(50),
-        contact: Sequelize.STRING(50),
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define(
+    'User',
+    {
+      id: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
       },
-      {
-        timestamps: false,
-      }
-    );
-  },
-
-  async down(queryInterface, Sequelize) {
-    queryInterface.dropTable('Users');
-  },
+      username: { type: DataTypes.STRING(35), allowNull: false },
+      email: { type: DataTypes.STRING(50), allowNull: false },
+      password: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+      address: DataTypes.STRING(50),
+      contact: DataTypes.STRING(50),
+    },
+    {
+      timestamps: false,
+    }
+  );
+  return User;
 };

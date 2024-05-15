@@ -1,6 +1,6 @@
 'use strict';
 
-const Sequelize = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const env = process.env.NODE_ENV || 'development';
 
 // config 파일에 있는 설정값들을 불러온다.
@@ -11,7 +11,7 @@ const db = {};
 
 // new Sequelize를 통해 MySQL연결 객체를 생성
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
-
+db.users = require('./Users.js')(sequelize, DataTypes);
 // 연결객체를 나중에 재사용하기 위해 db.sequelize에 넣어둔다.
 db.sequelize = sequelize;
 
