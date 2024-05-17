@@ -66,33 +66,43 @@ const resetPassword = async (req, res) => {
 
 const getUserInfo = async (req, res) => {
   try {
-    const user = await userService.getUser(req, res);
-
+    const decodedPayload = await userService.getDecodedUser(req, res);
+    const user = userService.findUserByEmail(decodedPayload.email);
     if (!user) {
       return res.status(StatusCodes.NOT_FOUND).json({ status: 404, msg: '회원이 존재하지 않습니다.' });
     }
     res.status(StatusCodes.OK).json({ status: 200, user: user });
   } catch (err) {
-    console.log(err);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: '회원 조회 중에 문제가 발생했습니다.' });
   }
 };
 
 const updateUserInfo = async (req, res) => {
+  const updatedUser = req.body;
   try {
-    const result = await userService.updateUser(user);
-  } catch (err) {}
+    const decodedPayload = await userService.getDecodedUser(req, res);
+    const user = userService.findUserByEmail(decodedPayload.email);
+
+    if (!user) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ msg: '사용자 정보가 올바르지 않습니다.' });
+    }
+    await userService.updateUser(updatedUser, decodedPayload.email);
+
+    res.status(StatusCodes.OK).json({ status: 200, msg: '회원정보가 수정되었습니다' });
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: '회원 수정 중에 문제가 발생했습니다.' });
+  }
 };
 
 const deleteUserAccount = async (req, res) => {
   try {
-    const user = await userService.getUser(req, res);
-    console.log(user.dataValues.userId, '회원아이디');
+    const decodedPayload = await userService.getDecodedUser(req, res);
+    const user = userService.findUserByEmail(decodedPayload.email);
     if (!user) {
       return res.status(StatusCodes.NOT_FOUND).json({ status: 404, msg: '회원이 존재하지 않습니다.' });
     }
 
-    await userService.deleteUser(user.dataValues.userId);
+    await userService.deleteUser(decodedPayload.email);
     res.status(StatusCodes.OK).json({ status: 200, msg: '회원이 삭제되었습니다.' });
   } catch (err) {
     console.log(err);

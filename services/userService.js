@@ -11,7 +11,7 @@ const userService = {
     const hashPwd = userService.hashPwd(user.password, salt);
     return await User.create({ ...user, password: hashPwd, salt: salt });
   },
-  getUser: async (req, res) => {
+  getDecodedUser: async (req, res) => {
     const decodedPayload = await validateToken(req);
 
     if (decodedPayload instanceof jwt.TokenExpiredError) {
@@ -19,13 +19,14 @@ const userService = {
     } else if (decodedPayload instanceof jwt.JsonWebTokenError) {
       return res.status(StatusCodes.UNAUTHORIZED).json({ msg: '토큰이 잘못됐습니다' });
     }
-    return userService.findUserByEmail(decodedPayload.email);
+    return decodedPayload;
   },
-  updateUser: async (user) => {
-    return await User.update({});
+  updateUser: async (updatedUser, email) => {
+    const [numOfAffectedRows, affectedRows] = await User.update(updatedUser, { where: { email } });
+    return affectedRows;
   },
-  deleteUser: async (userId) => {
-    return await User.destroy({ where: { userId } });
+  deleteUser: async (email) => {
+    return await User.destroy({ where: { email } });
   },
   findUserByEmail: async (email) => {
     return await User.findOne({ where: { email } });
