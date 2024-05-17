@@ -6,7 +6,7 @@ router.post('/signin', userController.signin);
 router.post('/reset-password/request', userController.reqResetPassword);
 router.post('/reset-password', userController.resetPassword);
 router
-  .get('/:userId', userController.getUserInfo)
+  .get('/', userController.getUserInfo)
   .put(userController.updateUserInfo)
   .delete(userController.deleteUserAccount);
 

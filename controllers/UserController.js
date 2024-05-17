@@ -1,12 +1,11 @@
 const userService = require('../services/userService');
 const { StatusCodes } = require('http-status-codes');
+
 const signup = async (req, res) => {
   const user = req.body;
-
   try {
     await userService.createUser(user);
   } catch (err) {
-    console.log(err);
     return res.status(StatusCodes.BAD_REQUEST).json({ status: 400 });
   }
 
@@ -21,7 +20,7 @@ const signin = async (req, res) => {
       return res.status(StatusCodes.UNAUTHORIZED).json({ status: 401 });
     }
     const hashPwd = userService.hashPwd(password, user.salt);
-
+    console.log(hashPwd);
     if (user.password !== hashPwd) {
       return res.status(StatusCodes.UNAUTHORIZED).json({ status: 401 });
     }
@@ -31,7 +30,7 @@ const signin = async (req, res) => {
 
     res.status(StatusCodes.OK).json({ status: 200, user: user });
   } catch (err) {
-    console.error('로그인 중 오류 발생:', err);
+    console.log(err);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버 오류 발생' });
   }
 };
@@ -47,7 +46,6 @@ const reqResetPassword = async (req, res) => {
     }
     res.status(StatusCodes.UNAUTHORIZED).json({ msg: '비밀번호 초기화 요청에 실패 했습니다.' });
   } catch (err) {
-    console.log(err);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: '비밀번호 초기화 요청 중에 문제가 발생했습니다.' });
@@ -55,11 +53,11 @@ const reqResetPassword = async (req, res) => {
 };
 const resetPassword = async (req, res) => {
   const { email, password } = req.body;
+  const user = await userService.findUserByEmail(email);
   try {
-    await userService.resetPassword(email, password);
+    await userService.resetPassword(email, password, user.salt);
     res.status(StatusCodes.OK).json({ msg: '비밀번호가 초기화됐습니다.' });
   } catch (err) {
-    console.log(err);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: '비밀번호 초기화 중에 문제가 발생했습니다.' });
@@ -68,11 +66,16 @@ const resetPassword = async (req, res) => {
 
 const getUserInfo = async (req, res) => {
   try {
-  } catch (err) {}
+    const user = await userService.getUser(req, res);
+    res.status(StatusCodes.OK).json({ status: 200, user: user });
+  } catch (err) {
+    console.log(err);
+  }
 };
 const updateUserInfo = async (req, res) => {
   try {
-    await userService.updateUser(user);
+    const result = await userService.updateUser(user);
+    console.log(result, 'aa');
   } catch (err) {}
 };
 const deleteUserAccount = async (req, res) => {
