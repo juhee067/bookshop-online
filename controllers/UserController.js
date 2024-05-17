@@ -40,7 +40,18 @@ const reqResetPassword = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await userService.findUserByEmail(email);
-  } catch (err) {}
+    if (user) {
+      return res
+        .status(StatusCodes.OK)
+        .json({ email: user.email, msg: '비밀번호 초기화가 요청됐습니다.' });
+    }
+    res.status(StatusCodes.UNAUTHORIZED).json({ msg: '비밀번호 초기화 요청에 실패 했습니다.' });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: '비밀번호 초기화 요청 중에 문제가 발생했습니다.' });
+  }
 };
 const resetPassword = async (req, res) => {
   try {
