@@ -2,9 +2,11 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const db = require('../models');
 const User = db.users;
+
+const salt = crypto.randomBytes(10).toString('base64');
+
 const userService = {
   createUser: async (user) => {
-    const salt = crypto.randomBytes(10).toString('base64');
     const hashPwd = userService.hashPwd(user.password, salt);
     return await User.create({ ...user, password: hashPwd, salt: salt });
   },
@@ -27,8 +29,10 @@ const userService = {
   hashPwd: (password, salt) => {
     return crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
   },
-  reqResetPassword: () => {},
-  resetPassword: () => {},
+  resetPassword: async (email, password) => {
+    const hashPwd = userService.hashPwd(password, salt);
+    return await User.update({ password: hashPwd }, { where: { email } });
+  },
 };
 
 module.exports = userService;

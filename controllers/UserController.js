@@ -54,8 +54,16 @@ const reqResetPassword = async (req, res) => {
   }
 };
 const resetPassword = async (req, res) => {
+  const { email, password } = req.body;
   try {
-  } catch (err) {}
+    await userService.resetPassword(email, password);
+    res.status(StatusCodes.OK).json({ msg: '비밀번호가 초기화됐습니다.' });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: '비밀번호 초기화 중에 문제가 발생했습니다.' });
+  }
 };
 
 const getUserInfo = async (req, res) => {
