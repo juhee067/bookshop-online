@@ -67,21 +67,37 @@ const resetPassword = async (req, res) => {
 const getUserInfo = async (req, res) => {
   try {
     const user = await userService.getUser(req, res);
+
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ status: 404, msg: '회원이 존재하지 않습니다.' });
+    }
     res.status(StatusCodes.OK).json({ status: 200, user: user });
   } catch (err) {
     console.log(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: '회원 조회 중에 문제가 발생했습니다.' });
   }
 };
+
 const updateUserInfo = async (req, res) => {
   try {
     const result = await userService.updateUser(user);
-    console.log(result, 'aa');
   } catch (err) {}
 };
+
 const deleteUserAccount = async (req, res) => {
   try {
-    await userService.deleteUser(user);
-  } catch (err) {}
+    const user = await userService.getUser(req, res);
+    console.log(user.dataValues.userId, '회원아이디');
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ status: 404, msg: '회원이 존재하지 않습니다.' });
+    }
+
+    await userService.deleteUser(user.dataValues.userId);
+    res.status(StatusCodes.OK).json({ status: 200, msg: '회원이 삭제되었습니다.' });
+  } catch (err) {
+    console.log(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ msg: '회원 삭제 중에 문제가 발생했습니다.' });
+  }
 };
 
 module.exports = {

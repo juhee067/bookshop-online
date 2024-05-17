@@ -11,11 +11,21 @@ const userService = {
     const hashPwd = userService.hashPwd(user.password, salt);
     return await User.create({ ...user, password: hashPwd, salt: salt });
   },
+  getUser: async (req, res) => {
+    const decodedPayload = await validateToken(req);
+
+    if (decodedPayload instanceof jwt.TokenExpiredError) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ msg: '토큰이 만료됐습니다.' });
+    } else if (decodedPayload instanceof jwt.JsonWebTokenError) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ msg: '토큰이 잘못됐습니다' });
+    }
+    return userService.findUserByEmail(decodedPayload.email);
+  },
   updateUser: async (user) => {
     return await User.update({});
   },
-  deleteUser: async (user) => {
-    return await User.destroy({});
+  deleteUser: async (userId) => {
+    return await User.destroy({ where: { userId } });
   },
   findUserByEmail: async (email) => {
     return await User.findOne({ where: { email } });
@@ -33,16 +43,6 @@ const userService = {
   resetPassword: async (email, password, salt) => {
     const hashPwd = userService.hashPwd(password, salt);
     return await User.update({ password: hashPwd }, { where: { email } });
-  },
-  getUser: async (req, res) => {
-    const decodedPayload = await validateToken(req);
-
-    if (decodedPayload instanceof jwt.TokenExpiredError) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ msg: '토큰이 만료됐습니다.' });
-    } else if (decodedPayload instanceof jwt.JsonWebTokenError) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ msg: '토큰이 잘못됐습니다' });
-    }
-    return userService.findUserByEmail(decodedPayload.email);
   },
 };
 

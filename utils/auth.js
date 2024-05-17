@@ -5,10 +5,7 @@ const validateToken = async (req) => {
     if (receivedToken) {
       return jwt.verify(receivedToken, process.env.PRIVATE_KEY);
     }
-
-    throw new ReferenceError('token이 없습니다.');
   } catch (err) {
-    console.log(err.name, err.message);
     return err;
   }
 };
