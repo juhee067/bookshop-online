@@ -8,6 +8,12 @@ const userService = {
     const hashPwd = userService.hashPwd(user.password, salt);
     return await User.create({ ...user, password: hashPwd, salt: salt });
   },
+  updateUser: async (user) => {
+    return await User.update({});
+  },
+  deleteUser: async (user) => {
+    return await User.destroy({});
+  },
   findUserByEmail: async (email) => {
     return await User.findOne({ where: { email } });
   },
@@ -21,6 +27,8 @@ const userService = {
   hashPwd: (password, salt) => {
     return crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
   },
+  reqResetPassword: () => {},
+  resetPassword: () => {},
 };
 
 module.exports = userService;
