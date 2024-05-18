@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const Book = sequelize.define(
+  const book = sequelize.define(
     'Book',
     {
       bookId: {
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       detail: {
-        type: DataTypes.LONGTEXT,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       author: {
@@ -42,14 +42,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER(11),
       },
       contents: {
-        type: DataTypes.LONGTEXT,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       price: {
         type: DataTypes.INTEGER(11),
         allowNull: false,
       },
-      pubDate: {
+      pub_date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
@@ -58,5 +58,5 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  return Book;
+  return book;
 };

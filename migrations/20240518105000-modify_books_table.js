@@ -47,7 +47,7 @@ module.exports = {
         type: Sequelize.INTEGER(11),
         allowNull: false,
       },
-      pubDate: {
+      pub_date: {
         type: Sequelize.DATE,
         allowNull: false,
       },
