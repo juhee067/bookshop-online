@@ -1,12 +1,20 @@
-const userController = require('../controllers/userController.js');
+const {
+  signup,
+  signin,
+  reqResetPassword,
+  resetPassword,
+  getUserInfo,
+  updateUserInfo,
+  deleteUserAccount,
+} = require('../controllers/UserController.js');
 const router = require('express').Router();
 
-router.post('/signup', userController.signup);
-router.post('/signin', userController.signin);
-router.post('/reset-password/request', userController.reqResetPassword);
-router.post('/reset-password', userController.resetPassword);
-router.get('/profile', userController.getUserInfo).put('/profile', userController.updateUserInfo);
+router.post('/signup', signup);
+router.post('/signin', signin);
+router.post('/reset-password/request', reqResetPassword);
+router.post('/reset-password', resetPassword);
+router.get('/profile', getUserInfo).put('/profile', updateUserInfo);
 
-router.delete('/account', userController.deleteUserAccount);
+router.delete('/account', deleteUserAccount);
 
 module.exports = router;
