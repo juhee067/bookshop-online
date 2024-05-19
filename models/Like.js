@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const like = sequelize.define(
+  const Like = sequelize.define(
     'Like',
     {
       user_id: {
@@ -18,5 +18,5 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  return like;
+  return Like;
 };

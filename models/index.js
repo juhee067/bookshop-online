@@ -8,8 +8,10 @@ const config = require('../config/config')[env];
 const db = {};
 
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
-db.users = require('./user.js')(sequelize, DataTypes);
-db.books = require('./books.js')(sequelize, DataTypes);
+db.users = require('./User.js')(sequelize, DataTypes);
+db.books = require('./Book.js')(sequelize, DataTypes);
+db.category = require('./Category.js')(sequelize, DataTypes);
+db.likes = require('./Like.js')(sequelize, DataTypes);
 
 db.sequelize = sequelize;
 

@@ -1,23 +1,47 @@
 const db = require('../models');
 const { Op } = require('sequelize');
 const Book = db.books;
+const Category = db.category;
 
 const bookService = {
   allBooks: () => {
-    return Book.findAll();
+    return Book.findAll({
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['category_name'],
+        },
+      ],
+    });
   },
-  getBookById: async (req) => {
-    const { bookId } = req.params;
-    return await Book.findOne({ where: { bookId } });
+  getBookById: async (bookId) => {
+    return await Book.findOne({
+      where: { bookId },
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['category_name'],
+        },
+      ],
+    });
   },
 
-  getBooksByCategory: async (req) => {
-    const { categoryId } = query;
-    return await Book.findOne({ where: { category_id: categoryId } });
+  getBooksByCategory: async (categoryId) => {
+    return await Book.findOne({
+      where: { category_id: categoryId },
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['category_name'],
+        },
+      ],
+    });
   },
   getNewBooks: async (req) => {
     const { news } = query;
-    return await Book.findOne({ where: { news: categoryId } });
   },
   getPaginatedBooks: () => {
     const { limit, currentPage } = query;

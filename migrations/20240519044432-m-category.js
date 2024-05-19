@@ -9,6 +9,10 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        references: {
+          model: 'Books',
+          key: 'category_id',
+        },
       },
       category_name: {
         type: Sequelize.STRING,

@@ -1,9 +1,17 @@
-const { allBooks, getBookById } = require('../services/bookService');
+const { allBooks, getBookById, getBooksByCategory } = require('../services/bookService');
 const { StatusCodes } = require('http-status-codes');
 
 const getAllBooks = async (req, res) => {
+  const { categoryId } = req.query;
+
   try {
-    const books = await allBooks();
+    let books;
+
+    if (categoryId) {
+      books = await getBooksByCategory(categoryId);
+    } else {
+      books = await allBooks();
+    }
 
     if (books.length === 0) {
       return res
@@ -12,6 +20,7 @@ const getAllBooks = async (req, res) => {
     }
     return res.status(StatusCodes.OK).json({ status: 200, books });
   } catch (err) {
+    console.log(err);
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: '도서 전체 조회 중에 오류가 발생했습니다.' });
@@ -20,8 +29,9 @@ const getAllBooks = async (req, res) => {
 
 const getFilterBooks = async (req, res) => {
   try {
-    const books = await getBookById(req);
+    const { bookId } = req.params;
 
+    const books = await getBookById(bookId);
     if (books.length === 0) {
       return res
         .status(StatusCodes.NOT_FOUND)

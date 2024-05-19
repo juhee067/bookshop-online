@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const book = sequelize.define(
+  const Book = sequelize.define(
     'Book',
     {
       bookId: {
@@ -58,5 +58,10 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
-  return book;
+
+  Book.associate = (models) => {
+    Book.belongsTo(models.Category, { foreignKey: 'category_id', as: 'category' });
+  };
+
+  return Book;
 };
