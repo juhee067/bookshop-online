@@ -6,12 +6,21 @@ const bookService = {
   allBooks: () => {
     return Book.findAll();
   },
-  bookById: async (req) => {
+  getBookById: async (req) => {
     const { bookId } = req.params;
     return await Book.findOne({ where: { bookId } });
   },
-  getBooksByCategory: () => {},
-  getNewBooks: () => {},
-  getPaginatedBooks: () => {},
+
+  getBooksByCategory: async (req) => {
+    const { categoryId } = query;
+    return await Book.findOne({ where: { category_id: categoryId } });
+  },
+  getNewBooks: async (req) => {
+    const { news } = query;
+    return await Book.findOne({ where: { news: categoryId } });
+  },
+  getPaginatedBooks: () => {
+    const { limit, currentPage } = query;
+  },
 };
 module.exports = bookService;

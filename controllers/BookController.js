@@ -1,4 +1,4 @@
-const { allBooks, bookById } = require('../services/bookService');
+const { allBooks, getBookById } = require('../services/bookService');
 const { StatusCodes } = require('http-status-codes');
 
 const getAllBooks = async (req, res) => {
@@ -20,7 +20,7 @@ const getAllBooks = async (req, res) => {
 
 const getFilterBooks = async (req, res) => {
   try {
-    const books = await bookById(req);
+    const books = await getBookById(req);
 
     if (books.length === 0) {
       return res
