@@ -1,17 +1,60 @@
 const db = require('../models');
-const { Op } = require('sequelize');
-const Book = db.books;
+const { Op, Sequelize } = require('sequelize');
+const Book = db.Book;
+const Category = db.Category;
 
 const bookService = {
-  allBooks: () => {
-    return Book.findAll();
+  allBooks: async () => {
+    try {
+      const books = await Book.findAll({
+        include: [
+          {
+            model: Category,
+            as: 'category',
+            attributes: [],
+          },
+        ],
+        attributes: {
+          include: [[Sequelize.col('category.category_name'), 'category_name']],
+        },
+      });
+      return books;
+    } catch (error) {
+      console.error('Error fetching books:', error);
+      throw error;
+    }
   },
-  bookById: async (req) => {
-    const { bookId } = req.params;
-    return await Book.findOne({ where: { bookId } });
+
+  getBookById: async (bookId) => {
+    return await Book.findOne({
+      where: { book_id: bookId },
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['category_name'],
+        },
+      ],
+    });
   },
-  getBooksByCategory: () => {},
-  getNewBooks: () => {},
-  getPaginatedBooks: () => {},
+
+  getBooksByCategory: async (categoryId) => {
+    return await Book.findOne({
+      where: { category_id: categoryId },
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['category_name'],
+        },
+      ],
+    });
+  },
+  getNewBooks: async (req) => {
+    const { news } = query;
+  },
+  getPaginatedBooks: () => {
+    const { limit, currentPage } = query;
+  },
 };
 module.exports = bookService;

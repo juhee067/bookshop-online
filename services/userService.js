@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const db = require('../models');
 const { validateToken } = require('../utils/auth');
-const User = db.users;
+const User = db.User;
 
 const userService = {
   createUser: async (user) => {
