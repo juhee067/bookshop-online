@@ -3,21 +3,23 @@ const { Op, Sequelize } = require('sequelize');
 const Book = db.Book;
 const Category = db.Category;
 
+const commonOptions = {
+  include: [
+    {
+      model: Category,
+      as: 'category',
+      attributes: [],
+    },
+  ],
+  attributes: {
+    include: [[Sequelize.col('category.category_name'), 'category_name']],
+  },
+};
+
 const bookService = {
   allBooks: async () => {
     try {
-      const books = await Book.findAll({
-        include: [
-          {
-            model: Category,
-            as: 'category',
-            attributes: [],
-          },
-        ],
-        attributes: {
-          include: [[Sequelize.col('category.category_name'), 'category_name']],
-        },
-      });
+      const books = await Book.findAll(commonOptions);
       return books;
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -28,32 +30,14 @@ const bookService = {
   getBookById: async (bookId) => {
     return await Book.findOne({
       where: { book_id: bookId },
-      include: [
-        {
-          model: Category,
-          as: 'category',
-          attributes: [],
-        },
-      ],
-      attributes: {
-        include: [[Sequelize.col('category.category_name'), 'category_name']],
-      },
+      ...commonOptions,
     });
   },
 
   getBooksByCategory: async (categoryId) => {
     return await Book.findAll({
       where: { category_id: categoryId },
-      include: [
-        {
-          model: Category,
-          as: 'category',
-          attributes: [],
-        },
-      ],
-      attributes: {
-        include: [[Sequelize.col('category.category_name'), 'category_name']],
-      },
+      ...commonOptions,
     });
   },
   getNewBooks: async (req) => {
