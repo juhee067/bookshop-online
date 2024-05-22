@@ -12,7 +12,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 db.User = require('./User.js')(sequelize, DataTypes);
 db.Book = require('./Book.js')(sequelize, DataTypes);
 db.Category = require('./Category.js')(sequelize, DataTypes);
-db.Like = require('./Like.js')(sequelize, DataTypes);
+db.likes = require('./Like.js')(sequelize, DataTypes);
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {
