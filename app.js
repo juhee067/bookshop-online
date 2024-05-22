@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
-
+const userRouter = require('./routers/UserRouter');
+const bookRouter = require('./routers/BookRouter');
 // index.js에 있는 db.sequelize 객체 모듈을 구조분해로 불러온다.
 const { sequelize } = require('./models');
 const app = express();
@@ -34,8 +35,8 @@ app.use((err, req, res, next) => {
   res.render('error'); // 템플릿 엔진을 렌더링 하여 응답
 });
 
-const userRouter = require('./routers/UserRouter');
 app.use('/users', userRouter);
+app.use('/books', bookRouter);
 
 // 서버 실행
 app.listen(app.get('port'), () => {
