@@ -45,8 +45,12 @@ const bookService = {
       },
     });
   },
-  getPaginatedBooks: () => {
-    const { limit, currentPage } = query;
+  getPaginatedBooks: async (limit, currentPage) => {
+    const offset = (currentPage - 1) * limit;
+    return await Book.findAll({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
   },
 };
 module.exports = bookService;

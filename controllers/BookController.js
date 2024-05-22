@@ -1,8 +1,14 @@
-const { allBooks, getBookById, getBooksByCategory, getNewBooks } = require('../services/bookService');
+const {
+  allBooks,
+  getBookById,
+  getBooksByCategory,
+  getNewBooks,
+  getPaginatedBooks,
+} = require('../services/bookService');
 const { StatusCodes } = require('http-status-codes');
 const db = require('../models');
 const getAllBooks = async (req, res) => {
-  const { categoryId, news } = req.query;
+  const { categoryId, news, limit, currentPage } = req.query;
   console.log(news);
   try {
     let books;
@@ -11,6 +17,8 @@ const getAllBooks = async (req, res) => {
       books = await getBooksByCategory(categoryId);
     } else if (news) {
       books = await getNewBooks();
+    } else if (limit && currentPage) {
+      books = await getPaginatedBooks(limit, currentPage);
     } else {
       books = await allBooks();
     }
