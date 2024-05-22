@@ -1,16 +1,16 @@
-const { allBooks, getBookById, getBooksByCategory } = require('../services/bookService');
+const { allBooks, getBookById, getBooksByCategory, getNewBooks } = require('../services/bookService');
 const { StatusCodes } = require('http-status-codes');
 const db = require('../models');
 const getAllBooks = async (req, res) => {
-  const { categoryId } = req.query;
-
-  // 쿼리 확인
-
+  const { categoryId, news } = req.query;
+  console.log(news);
   try {
     let books;
 
     if (categoryId) {
       books = await getBooksByCategory(categoryId);
+    } else if (news) {
+      books = await getNewBooks();
     } else {
       books = await allBooks();
     }

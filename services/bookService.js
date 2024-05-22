@@ -18,30 +18,32 @@ const commonOptions = {
 
 const bookService = {
   allBooks: async () => {
-    try {
-      const books = await Book.findAll(commonOptions);
-      return books;
-    } catch (error) {
-      console.error('Error fetching books:', error);
-      throw error;
-    }
+    const books = await Book.findAll(commonOptions);
+    return books;
   },
 
   getBookById: async (bookId) => {
     return await Book.findOne({
       where: { book_id: bookId },
-      ...commonOptions,
     });
   },
 
   getBooksByCategory: async (categoryId) => {
     return await Book.findAll({
       where: { category_id: categoryId },
-      ...commonOptions,
     });
   },
-  getNewBooks: async (req) => {
-    const { news } = query;
+
+  getNewBooks: async () => {
+    const currentDate = new Date();
+    const monthAgo = new Date();
+    monthAgo.setMonth(currentDate.getMonth() - 1);
+
+    return await Book.findAll({
+      where: {
+        pub_date: { [Op.between]: [monthAgo, currentDate] },
+      },
+    });
   },
   getPaginatedBooks: () => {
     const { limit, currentPage } = query;
