@@ -1,7 +1,7 @@
 const db = require('../models');
 const { Op } = require('sequelize');
-const Book = db.books;
-const Category = db.category;
+const Book = db.Book;
+const Category = db.Category;
 
 const bookService = {
   allBooks: () => {
@@ -11,13 +11,14 @@ const bookService = {
           model: Category,
           as: 'category',
           attributes: ['category_name'],
+          required: true,
         },
       ],
     });
   },
   getBookById: async (bookId) => {
     return await Book.findOne({
-      where: { bookId },
+      where: { book_id: bookId },
       include: [
         {
           model: Category,

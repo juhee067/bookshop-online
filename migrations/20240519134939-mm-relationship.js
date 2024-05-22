@@ -2,7 +2,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Books', {
-      bookId: {
+      book_id: {
         type: Sequelize.INTEGER(11),
         primaryKey: true,
         allowNull: false,
@@ -20,7 +20,7 @@ module.exports = {
         allowNull: true, // 카테고리가 선택적이라면 true로 변경
         references: {
           model: 'Categories',
-          key: 'category_id',
+          key: 'id',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE', // 적절한 삭제 옵션을 선택하세요

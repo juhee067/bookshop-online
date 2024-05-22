@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   const Book = sequelize.define(
     'Book',
     {
-      bookId: {
+      book_id: {
         type: DataTypes.INTEGER(11),
         primaryKey: true,
         allowNull: false,
@@ -55,10 +55,12 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      tableName: 'Books',
       timestamps: false,
     }
   );
 
+  // Book 모델
   Book.associate = (models) => {
     Book.belongsTo(models.Category, { foreignKey: 'category_id', as: 'category' });
   };

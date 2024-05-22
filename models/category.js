@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   const Category = sequelize.define(
     'Category',
     {
-      category_id: {
+      id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
@@ -15,13 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {
-      timestamps: false,
-    }
+    { tableName: 'Categories', timestamps: false }
   );
-
+  // 카테고리 모델
   Category.associate = (models) => {
-    Category.hasMany(models.Book, { foreignKey: 'category_id' });
+    Category.hasMany(models.Book, {
+      foreignKey: 'category_id',
+      as: 'Books',
+    });
   };
 
   return Category;
