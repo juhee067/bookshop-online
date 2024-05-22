@@ -32,22 +32,28 @@ const bookService = {
         {
           model: Category,
           as: 'category',
-          attributes: ['category_name'],
+          attributes: [],
         },
       ],
+      attributes: {
+        include: [[Sequelize.col('category.category_name'), 'category_name']],
+      },
     });
   },
 
   getBooksByCategory: async (categoryId) => {
-    return await Book.findOne({
+    return await Book.findAll({
       where: { category_id: categoryId },
       include: [
         {
           model: Category,
           as: 'category',
-          attributes: ['category_name'],
+          attributes: [],
         },
       ],
+      attributes: {
+        include: [[Sequelize.col('category.category_name'), 'category_name']],
+      },
     });
   },
   getNewBooks: async (req) => {
