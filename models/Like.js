@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        primaryKey: true,
       },
       liked_book_id: {
         type: DataTypes.STRING,
@@ -18,5 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
+  Like.associate = (models) => {
+    Like.belongsTo(models.Book, {
+      foreignKey: 'liked_book_id',
+      as: 'book',
+    });
+  };
+
   return Like;
 };

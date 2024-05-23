@@ -63,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
   // Book 모델
   Book.associate = (models) => {
     Book.belongsTo(models.Category, { foreignKey: 'category_id', as: 'category' });
+    Book.hasMany(models.Like, { foreignKey: 'liked_book_id', as: 'likes' });
   };
 
   return Book;

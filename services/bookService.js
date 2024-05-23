@@ -1,6 +1,7 @@
 const db = require('../models');
 const { Op, Sequelize } = require('sequelize');
 const Book = db.Book;
+const Like = db.Like;
 const Category = db.Category;
 
 const commonOptions = {
@@ -12,19 +13,35 @@ const commonOptions = {
     },
   ],
   attributes: {
-    include: [[Sequelize.col('category.category_name'), 'category_name']],
+    include: [
+      [Sequelize.col('category.category_name'), 'category_name'],
+      [
+        Sequelize.literal('(SELECT COUNT(*) FROM Likes WHERE Likes.liked_book_id = Book.book_id)'),
+        'likes',
+      ],
+    ],
   },
 };
 
 const bookService = {
-  allBooks: async () => {
-    const books = await Book.findAll(commonOptions);
+  getAllBooks: async () => {
+    const books = await Book.findAll();
     return books;
   },
 
   getBookById: async (bookId) => {
     return await Book.findOne({
       where: { book_id: bookId },
+      ...commonOptions,
+    });
+  },
+
+  userLikedBook: async (bookId, userId) => {
+    return await Like.findOne({
+      where: {
+        liked_book_id: bookId,
+        user_id: userId,
+      },
     });
   },
 
@@ -45,6 +62,7 @@ const bookService = {
       },
     });
   },
+
   getPaginatedBooks: async (limit, currentPage) => {
     const offset = (currentPage - 1) * limit;
     return await Book.findAll({

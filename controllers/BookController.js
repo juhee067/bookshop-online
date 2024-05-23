@@ -42,11 +42,16 @@ const getFilterBooks = async (req, res) => {
     const { bookId } = req.params;
 
     const books = await getBookById(bookId);
-    if (books.length === 0) {
+    if (!books) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ status: '404', message: '도서가 존재하지않습니다.' });
     }
+
+    // const userLikedBook = await userLikedBook(bookId, 1);
+    // console.log(userLikedBook, 'userLikedBook');
+    //books.dataValues.liked = userLikedBook !== null;
+
     return res.status(StatusCodes.OK).json({ status: 200, books });
   } catch (err) {
     console.log(err);
