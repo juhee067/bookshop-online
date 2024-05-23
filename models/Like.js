@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
   const Like = sequelize.define(
     'Like',
     {
+      id: {
+        type: DataTypes.INTEGER(11),
+        primaryKey: true,
+        allowNull: false,
+      },
       user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,

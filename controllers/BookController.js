@@ -4,6 +4,7 @@ const {
   getBooksByCategory,
   getNewBooks,
   getPaginatedBooks,
+  userLikedBook,
 } = require('../services/bookService');
 const { StatusCodes } = require('http-status-codes');
 const db = require('../models');
@@ -41,18 +42,18 @@ const getFilterBooks = async (req, res) => {
   try {
     const { bookId } = req.params;
 
-    const books = await getBookById(bookId);
-    if (!books) {
+    const book = await getBookById(bookId);
+    if (!book) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ status: '404', message: '도서가 존재하지않습니다.' });
     }
+    //   const userLiked = await bookService.userLikedBook(bookId, req.user.id);
+    const userLiked = await userLikedBook(bookId, 1);
+    console.log(userLiked, 'userLikedBook');
+    book.dataValues.liked = userLiked !== null;
 
-    // const userLikedBook = await userLikedBook(bookId, 1);
-    // console.log(userLikedBook, 'userLikedBook');
-    //books.dataValues.liked = userLikedBook !== null;
-
-    return res.status(StatusCodes.OK).json({ status: 200, books });
+    return res.status(StatusCodes.OK).json({ status: 200, book });
   } catch (err) {
     console.log(err);
     return res.status(StatusCodes.BAD_REQUEST).json({ message: '도서 조회 중에 오류가 발생했습니다.' });
