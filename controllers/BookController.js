@@ -6,11 +6,12 @@ const {
   getPaginatedBooks,
   userLikedBook,
 } = require('../services/bookService');
+const { getDecodedUser, findUserIdByEmail } = require('../services/userService');
 const { StatusCodes } = require('http-status-codes');
 const db = require('../models');
 const getAllBooks = async (req, res) => {
   const { categoryId, news, limit, currentPage } = req.query;
-  console.log(news);
+
   try {
     let books;
 
@@ -41,16 +42,17 @@ const getAllBooks = async (req, res) => {
 const getFilterBooks = async (req, res) => {
   try {
     const { bookId } = req.params;
-
+    const decodedPayload = await getDecodedUser(req, res);
+    let userId = await findUserIdByEmail(decodedPayload.email);
+    userId = userId.dataValues.user_id;
     const book = await getBookById(bookId);
     if (!book) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ status: '404', message: '도서가 존재하지않습니다.' });
     }
-    //   const userLiked = await bookService.userLikedBook(bookId, req.user.id);
-    const userLiked = await userLikedBook(bookId, 1);
-    console.log(userLiked, 'userLikedBook');
+
+    const userLiked = await userLikedBook(bookId, userId);
     book.dataValues.liked = userLiked !== null;
 
     return res.status(StatusCodes.OK).json({ status: 200, book });
