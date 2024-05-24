@@ -26,7 +26,7 @@ app.use(express.json()); // json 파싱
 app.use(express.urlencoded({ extended: false })); // uri 파싱
 
 // 에러 처리 미들웨어
-app.use((err, req, res, next) => {
+app.use((err, _, res) => {
   // 템플릿 변수 설정
   res.locals.message = err.message;
   res.locals.error = process.env.NODE_ENV !== 'production' ? err : {}; // 배포용이 아니라면 err설정 아니면 빈 객체

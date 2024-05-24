@@ -16,7 +16,9 @@ const commonOptions = {
     include: [
       [Sequelize.col('category.category_name'), 'category_name'],
       [
-        Sequelize.literal('(SELECT COUNT(*) FROM Likes WHERE Likes.liked_book_id = Book.book_id)'),
+        Sequelize.literal(
+          '(SELECT COUNT(*) FROM Likes WHERE Likes.liked_book_id = Book.book_id)'
+        ),
         'likes',
       ],
     ],

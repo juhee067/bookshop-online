@@ -7,7 +7,12 @@ const config = require('../config/config')[env];
 
 const db = {};
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config);
+const sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config
+);
 
 db.User = require('./User.js')(sequelize, DataTypes);
 db.Book = require('./Book.js')(sequelize, DataTypes);
