@@ -11,13 +11,15 @@ const userService = {
     return await User.create({ ...user, password: hashPwd, salt: salt });
   },
 
-  getDecodedUser: async (req, res) => {
+  getDecodedUser: async (req) => {
     const decodedPayload = await validateToken(req);
     return decodedPayload;
   },
 
   updateUser: async (updatedUser, email) => {
-    const [numOfAffectedRows, affectedRows] = await User.update(updatedUser, { where: { email } });
+    const [numOfAffectedRows, affectedRows] = await User.update(updatedUser, {
+      where: { email },
+    });
     return affectedRows;
   },
 
@@ -40,7 +42,9 @@ const userService = {
   },
 
   hashPwd: (password, salt) => {
-    return crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+    return crypto
+      .pbkdf2Sync(password, salt, 10000, 10, 'sha512')
+      .toString('base64');
   },
 
   resetPassword: async (email, password, salt) => {

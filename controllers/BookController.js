@@ -6,7 +6,10 @@ const {
   getPaginatedBooks,
   userLikedBook,
 } = require('../services/bookService');
-const { getDecodedUser, findUserIdByEmail } = require('../services/userService');
+const {
+  getDecodedUser,
+  findUserIdByEmail,
+} = require('../services/userService');
 const { StatusCodes } = require('http-status-codes');
 const db = require('../models');
 const getAllBooks = async (req, res) => {
@@ -42,12 +45,13 @@ const getAllBooks = async (req, res) => {
 const getFilterBooks = async (req, res) => {
   try {
     const { bookId } = req.params;
-    const decodedPayload = await getDecodedUser(req, res);
+    const decodedPayload = await getDecodedUser(req);
 
     let userId;
     if (decodedPayload && decodedPayload.email) {
       userId = await findUserIdByEmail(decodedPayload.email);
     }
+
     const book = await getBookById(bookId);
     if (!book) {
       return res
@@ -61,7 +65,9 @@ const getFilterBooks = async (req, res) => {
     return res.status(StatusCodes.OK).json({ status: 200, book });
   } catch (err) {
     console.log(err);
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: '도서 조회 중에 오류가 발생했습니다.' });
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: '도서 조회 중에 오류가 발생했습니다.' });
   }
 };
 
