@@ -13,11 +13,6 @@ const userService = {
 
   getDecodedUser: async (req, res) => {
     const decodedPayload = await validateToken(req);
-    if (decodedPayload instanceof jwt.TokenExpiredError) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ msg: '토큰이 만료됐습니다.' });
-    } else if (decodedPayload instanceof jwt.JsonWebTokenError) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({ msg: '토큰이 잘못됐습니다' });
-    }
     return decodedPayload;
   },
 
@@ -32,6 +27,9 @@ const userService = {
 
   findUserByEmail: async (email) => {
     return await User.findOne({ where: { email } });
+  },
+  findUserIdByEmail: async (email) => {
+    return await User.findOne({ where: { email }, attributes: ['user_id'] });
   },
 
   generateToken: (id, email, name) => {

@@ -6,11 +6,12 @@ const {
   getPaginatedBooks,
   userLikedBook,
 } = require('../services/bookService');
+const { getDecodedUser, findUserIdByEmail } = require('../services/userService');
 const { StatusCodes } = require('http-status-codes');
 const db = require('../models');
 const getAllBooks = async (req, res) => {
   const { categoryId, news, limit, currentPage } = req.query;
-  console.log(news);
+
   try {
     let books;
 
@@ -41,18 +42,22 @@ const getAllBooks = async (req, res) => {
 const getFilterBooks = async (req, res) => {
   try {
     const { bookId } = req.params;
+    const decodedPayload = await getDecodedUser(req, res);
 
+    let userId;
+    if (decodedPayload && decodedPayload.email) {
+      userId = await findUserIdByEmail(decodedPayload.email);
+    }
     const book = await getBookById(bookId);
     if (!book) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ status: '404', message: '도서가 존재하지않습니다.' });
     }
-    //   const userLiked = await bookService.userLikedBook(bookId, req.user.id);
-    const userLiked = await userLikedBook(bookId, 1);
-    console.log(userLiked, 'userLikedBook');
-    book.dataValues.liked = userLiked !== null;
-
+    if (userId) {
+      const userLiked = await userLikedBook(bookId, userId.dataValues.user_id);
+      book.dataValues.liked = userLiked !== null;
+    }
     return res.status(StatusCodes.OK).json({ status: 200, book });
   } catch (err) {
     console.log(err);
