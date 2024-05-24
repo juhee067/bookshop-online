@@ -17,7 +17,7 @@ const userService = {
   },
 
   updateUser: async (updatedUser, email) => {
-    const [numOfAffectedRows, affectedRows] = await User.update(updatedUser, {
+    const [_, affectedRows] = await User.update(updatedUser, {
       where: { email },
     });
     return affectedRows;
@@ -30,6 +30,7 @@ const userService = {
   findUserByEmail: async (email) => {
     return await User.findOne({ where: { email } });
   },
+
   findUserIdByEmail: async (email) => {
     return await User.findOne({ where: { email }, attributes: ['user_id'] });
   },
