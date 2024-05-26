@@ -5,7 +5,9 @@ const cartService = {
   addItem: async (cart) => {
     return await Cart.create(cart);
   },
-  getItem: async () => {},
+  getItem: async (cart) => {
+    return await Cart.findOne({ where: { id: cart } });
+  },
   deleteItem: async () => {},
 };
 
