@@ -26,11 +26,6 @@ const commonOptions = {
 };
 
 const bookService = {
-  getAllBooks: async () => {
-    const books = await Book.findAll();
-    return books;
-  },
-
   getBookById: async (bookId) => {
     return await Book.findOne({
       where: { book_id: bookId },
