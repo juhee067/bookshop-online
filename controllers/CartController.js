@@ -1,4 +1,4 @@
-const { addItem, getItem } = require('../services/cartService');
+const { addItem, getItem, deleteItem } = require('../services/cartService');
 const { StatusCodes } = require('http-status-codes');
 
 const addCart = async (req, res) => {
@@ -35,13 +35,21 @@ const getCart = async (req, res) => {
 
 const deleteCart = async (req, res) => {
   try {
-    const cart = req.body;
-    await addItem(cart);
-    res.status(StatusCodes.CREATED).json({ status: 201 });
+    let { cartId } = req.params;
+    cartId = parseInt(cartId);
+
+    const cart = await deleteItem(cartId);
+
+    if (!cart) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: '장바구니 목록이 없습니다' });
+    }
+    res.status(StatusCodes.OK).json({ message: '장바구니 목록이 없습니다' });
   } catch (err) {
     return res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ message: ' 중에 오류가 발생했습니다.' });
+      .json({ message: '장바구니 삭제 중에 오류가 발생했습니다.' });
   }
 };
 

@@ -8,7 +8,9 @@ const cartService = {
   getItem: async (cart) => {
     return await Cart.findOne({ where: { id: cart } });
   },
-  deleteItem: async () => {},
+  deleteItem: async (cart) => {
+    return await Cart.destroy({ where: { id: cart } });
+  },
 };
 
 module.exports = cartService;
