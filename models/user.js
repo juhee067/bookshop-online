@@ -22,9 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
     },
-    {
-      timestamps: false,
-    }
+    { tableName: 'Users', timestamps: false }
   );
   return User;
 };

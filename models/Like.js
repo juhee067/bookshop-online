@@ -18,9 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    {
-      timestamps: false,
-    }
+    { tableName: 'Likes', timestamps: false }
   );
 
   Like.associate = (models) => {

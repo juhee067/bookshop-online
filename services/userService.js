@@ -17,7 +17,7 @@ const userService = {
   },
 
   updateUser: async (updatedUser, email) => {
-    const [_, affectedRows] = await User.update(updatedUser, {
+    const [affectedRows] = await User.update(updatedUser, {
       where: { email },
     });
     return affectedRows;
